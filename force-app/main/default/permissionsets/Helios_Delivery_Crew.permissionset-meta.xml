@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <PermissionSet xmlns="http://soap.sforce.com/2006/04/metadata">
-    <description>Field crews: see the installations they are sent to, and update what happened on site.</description>
+    <description>Field crews: see the installations they are sent to, and update what happened on site. </description>
     <fieldPermissions>
         <editable>false</editable>
         <field>Installation__c.Account__c</field>
