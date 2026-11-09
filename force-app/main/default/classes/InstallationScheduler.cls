@@ -7,7 +7,7 @@ public with sharing class InstallationScheduler {
 
     // Returns the earliest date a crew can be sent to this installation.
     // The panels have to be in the warehouse, plus the preparation buffer.
-    public static Date earliestInstallDate(Id installationId) {
+    public static Datetime earliestInstallDate(Id installationId) {
         Date arrival = null;
         for (Panel_Batch__c batch : [
             SELECT Arrival_Date__c
@@ -22,7 +22,7 @@ public with sharing class InstallationScheduler {
         if (arrival == null) {
             return null;
         }
-        return arrival.addDays(PREPARATION_DAYS);
+        return Datetime.newInstance(arrival.addDays(PREPARATION_DAYS), Time.newInstance(8, 0, 0, 0));
     }
 
     /**
@@ -50,14 +50,14 @@ public with sharing class InstallationScheduler {
         ];
     }
 
-        /**
+    /**
      * The installations from the list that can be scheduled on the given day.
      *
      * @param installationIds the installations to check
      * @param wanted the day the planner wants
      * @return the ids that can take a crew that day
      */
-        public static List<Id> schedulableOn(List<Id> installationIds, Date wanted) {
+    public static List<Id> schedulableOn(List<Id> installationIds, Date wanted) {
         Map<Id, Date> latestArrival = new Map<Id, Date>();
         for (Panel_Batch__c batch : [
             SELECT Installation__c, Arrival_Date__c
