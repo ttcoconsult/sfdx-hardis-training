@@ -1,0 +1,16 @@
+{
+  "sfdxHardisLabel": "HandoverItems2",
+  "sfdxHardisDescription": "HandoverItems2",
+  "objects": [
+    {
+      "query": "SELECT Id,External_Id__c,Installation__c,Is_Done__c,Is_Template__c,Label__c,Name,Sequence__c FROM Handover_Item__c",
+      "operation": "Upsert",
+      "externalId": "External_Id__c",
+      "master": true,
+      "deleteOldData": false,
+      "useQueryAll": false,
+      "allOrNone": true,
+      "updateWithMockData": false
+    }
+  ]
+}

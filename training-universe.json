@@ -741,7 +741,7 @@
           "lab": 1,
           "slug": "3-1-configure-the-pipeline-up-to-production",
           "title": "Configure the CI/CD pipeline up to production",
-          "description": "Extend a two-stage Salesforce pipeline to production: branches, protections, and each org configured and authenticated with JWT by Add/Configure Org.",
+          "description": "Extend a two-stage Salesforce pipeline to production: branches, protections, and each org authenticated with JWT by Add or Reconnect a Major Org.",
           "time": "50 min"
         },
         {
@@ -761,8 +761,8 @@
         {
           "lab": 4,
           "slug": "3-4-merge-colliding-pull-requests",
-          "title": "Three Pull Requests collide: choose the merge order",
-          "description": "Decide the order three Pull Requests are merged in when two change the same file and one fails its check, as a Salesforce release manager.",
+          "title": "Three Pull Requests in one release: review the merge order",
+          "description": "Review the merge order of two Pull Requests that changed the same permission set, and send back a third that fails its check, as a release manager.",
           "time": "35 min"
         },
         {
