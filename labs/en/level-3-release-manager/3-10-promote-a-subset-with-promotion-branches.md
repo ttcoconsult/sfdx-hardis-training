@@ -29,7 +29,7 @@ depends_on:
 
 **Level**: 3 Release Manager
 
-**Time**: ~55 min<!-- observed --> (observed: median 57 min, 7 learners, fastest 39 min)<!-- /observed -->
+**Time**: ~1 h 15<!-- observed --> (observed: median 1 h 16, 11 learners, fastest 39 min)<!-- /observed -->
 
 **You will**: ship three approved User Stories to preprod while two others stay behind in UAT, solve
 the conflict that one of them drags along, and put the pipeline back afterwards, using the one
@@ -71,6 +71,9 @@ included.
 - [ ] `enablePromotionBranches` and `allowedPromotionSteps` published in
       [Lab 3.1](3-1-configure-the-pipeline-up-to-production.md), and carried up to `preprod` by the promotions of Labs 3.5 and 3.6
 - [ ] Nothing waiting in the **Source Control** panel that you still care about
+- [ ] **SF Merge Driver**, at the bottom right of VS Code, shows a grey circle: the driver is off.
+      If the circle is green, click it to turn the driver off, or it solves the conflicts of step 4
+      before you see them
 
 ## Steps
 
@@ -271,7 +274,7 @@ top of US-058, and `preprod` has never seen US-058.
 
 #### Do: answer the conflict question
 
-1. The command asks what to do with US-059, and offers four answers **(1)**. Take the first one,
+1. The command asks what to do with US-059, and offers seven answers **(1)**. Take the first one,
    **Recommended: commit this User Story and every following conflict with their conflict markers,
    without asking again**
 
@@ -285,8 +288,18 @@ top of US-058, and `preprod` has never seen US-058.
 #### Why this answer
 
 The promotion is assembled whole, conflict included, and you solve it in one pass on the branch
-afterwards, in step 6. The other three answers are for other weeks: leave the story out, commit this
-one with its markers but ask again on the next conflict, or stop and undo everything.
+afterwards, in step 6. The other answers, in the order the question lists them, are for other weeks:
+commit this one with its markers but ask again on the next conflict, solve this conflict now in the
+editor while the command waits, leave the story out, the two risky ones below, or stop and undo
+everything.
+
+The two answers marked **(risky)** keep the `uat` side of every conflicting line, and nobody reads
+what they decided. Here they would keep the Warranty Years row and grant that step 6 deletes by
+hand, which belong to US-058, a story this promotion leaves behind. This week the validation would
+still catch it, because `preprod` has no `Warranty_Years__c` field and the deployment fails. With a
+field that already exists in `preprod`, nothing would: the files are only listed, under a warning
+in the Pull Request description and at the end of the commit message of the story, for somebody to
+read before merging.
 
 The log goes on to the end:
 
@@ -718,7 +731,7 @@ the one the promotion branches documentation prescribes after every promotion, a
 #### Do
 
 1. **New User Story**, as in [Lab 3.7](3-7-hotfix-and-retrofit.md) step 7: type **Retrofit**, name `US-059-retrofit`, target
-   `integration`, org `helios-dev`
+   `integration`, org `helios-dev` (**Scratch org**, then **Reuse scratch org helios-dev**)
 2. **Git: Fetch** then **Git: Merge...** from the Command Palette, as in [Lab 3.7](3-7-hotfix-and-retrofit.md) step 8, and
    pick **origin/preprod** this time, under **remote branches**
 3. The merge stops on the same two files, which appear under **Merge Changes** in the **Source
@@ -823,11 +836,12 @@ branch the pipeline does not merge into opens nothing, on purpose.
 sfdx-hardis is willing to invent: which branches a release manager may promote between is a decision
 about your pipeline.
 
-**The cherry-pick of US-059 did not conflict.**
-Something solved it for you, usually the `sf-git-merge-driver` plugin if it is installed on your
-machine. Open the **Files changed** tab of the Pull Request and look for `Warranty_Years__c` in the
+**The cherry-pick of US-059 did not conflict, or conflicted on one file only.**
+Something solved it for you, usually the SF Merge Driver: its item at the bottom right of VS Code
+shows a green circle, and a click turns it off. Open the **Files changed** tab of the Pull Request and look for `Warranty_Years__c` in the
 layout and the permission set. If it travelled, the deployment fails on a field `preprod` does not
-have: take it out on the promotion branch the way step 6 does, and push.
+have: take it out on the promotion branch the way step 6 does, and push. If it did not, the
+promotion is right as it is, and the retrofit of step 9 can still stop on both files.
 
 **There are no Accept links above the conflict block.**
 The file is open in a preview or the block is out of view. Click into the file, scroll to the

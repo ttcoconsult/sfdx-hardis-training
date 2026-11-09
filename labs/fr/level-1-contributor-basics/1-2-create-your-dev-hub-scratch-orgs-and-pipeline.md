@@ -5,7 +5,7 @@ description: "Inscrivez-vous à une org Salesforce Developer Edition gratuite, p
 level: 1
 lab: 2
 lang: fr
-source_rev: "d82a755e4de3c0f4a6f11202e27a206fad0aa0b9"
+source_rev: "cdc7d3dd4a6229b1613b19dc281b5c3a09afef49"
 screenshots:
   - annotated/web/sf-signup
   - annotated/web/gh-cli-download
@@ -342,9 +342,7 @@ Helios, et une pipeline câblée dessus, le tout construit par une seule command
 
    ![VS Code demandant comment autoriser la commande Training, avec Always allow](../../_assets/annotated/vscode/training-menu-authorization.png)
 
-4. Elle nomme l'org qu'elle prend, `helios-prod`, et ne demande qu'un oui avant de changer quoi que
-   ce soit. Répondez oui
-5. Elle s'arrête sur une ligne du genre `Your one-time code is 5989-F9D9` et ouvre
+4. Elle s'arrête sur une ligne du genre `Your one-time code is 5989-F9D9` et ouvre
    [github.com/login/device](https://github.com/login/device) dans votre navigateur. Saisissez le
    code là-bas, puis acceptez tout ce que github.com demande : l'écran d'autorisation et chacune
    des permissions listées. Si le navigateur ne s'est pas ouvert, l'adresse est affichée juste sous
@@ -353,17 +351,27 @@ Helios, et une pipeline câblée dessus, le tout construit par une seule command
   !!! tip "Dans Agentforce Vibes"
       Le navigateur ne s'ouvre pas tout seul : cliquez sur le lien affiché.
 
-6. Revenez dans VS Code : la commande repart toute seule et ne redemandera plus rien
-7. Elle ouvre ensuite l'onglet **Actions** de votre fork dans votre navigateur, et attend. Cliquez
+5. Revenez dans VS Code : la commande repart toute seule et ne vous redemandera plus de vous
+   connecter
+6. Si cet ordinateur était déjà connecté à GitHub, les points 4 et 5 n'ont pas lieu. Elle demande à
+   la place **Fork the course into the GitHub account your-handle?**, avec le compte qu'elle a
+   trouvé. Lisez le nom. Si c'est le compte où vous voulez le fork, choisissez **Yes, use
+   your-handle**. Sinon, par exemple le compte d'un ancien employeur, choisissez **Use ... instead**
+   quand votre propre compte est dans la liste, ou **Sign in with another GitHub account**, qui
+   passe par le code du point 4
+7. Elle nomme ensuite l'org qu'elle prend, `helios-prod`, et ne demande qu'un oui avant de changer
+   quoi que ce soit. Répondez oui
+8. Elle ouvre ensuite l'onglet **Actions** de votre fork dans votre navigateur, et attend. Cliquez
    sur **I understand my workflows, go ahead and enable them**, et revenez dans VS Code : la
    commande continue toute seule
-8. Laissez-la dérouler ses huit étapes. Elle vous tient au courant au fur et à mesure :
+9. Laissez-la dérouler ses huit étapes. Elle vous tient au courant au fur et à mesure :
 
    ```text title="Résultat"
    Developer Edition org: helios-prod
 
    1 of 8  Your own copy of the repository
    OK  origin is now your-handle/sfdx-hardis-training, and the shared repository is upstream.
+   OK  Issues switched on in your-handle/sfdx-hardis-training: sfdx-hardis keeps the list of your development orgs in one.
 
    2 of 8  Actions turned on
    OK  Actions are on.
@@ -393,9 +401,9 @@ Helios, et une pipeline câblée dessus, le tout construit par une seule command
    OK  A branch is now deleted once its Pull Request is merged. integration and uat stay: a protected branch cannot be deleted.
    ```
 
-9. Attendez. Comptez quinze à vingt minutes, presque entièrement sur les étapes 4 et 5, quand
-   Salesforce crée les orgs et que l'application est déployée dans les trois à la fois. Rien ne
-   s'affiche pendant ce temps-là. Ce n'est pas bloqué
+10. Attendez. Comptez quinze à vingt minutes, presque entièrement sur les étapes 4 et 5, quand
+    Salesforce crée les orgs et que l'application est déployée dans les trois à la fois. Rien ne
+    s'affiche pendant ce temps-là. Ce n'est pas bloqué
 
 !!! warning "Lisez la ligne avant d'autoriser"
     **Allow once** ne lance que cette fois-ci, **Always allow** s'en souvient. Les deux conviennent
@@ -425,6 +433,11 @@ La première chose qu'elle fait, c'est vous connecter à GitHub. L'étape 1 des 
 du repository, et cela demande votre compte GitHub. Il demande à créer un repository dans votre
 compte et à écrire les secrets que lisent les jobs CI, c'est-à-dire exactement ce que fait cette
 étape.
+
+Quand la CLI GitHub était déjà connectée, elle vous demande le compte à la place. La CLI garde une
+connexion un an, et le fork va dans le compte qu'elle détient, quel que soit le nom qu'affichent
+VS Code ou git. Sur un ordinateur qui garde encore un compte de travail, ou celui d'un ancien
+employeur, c'est là que le fork arriverait, sans un mot.
 
 Puis elle vous demande un clic sur GitHub. GitHub désactive les workflows de chaque nouveau fork,
 derrière une bannière qu'aucune commande ne peut presser. Sans ce clic, rien ne vérifierait ni ne
@@ -482,6 +495,15 @@ Le chargement de données est un **upsert sur un identifiant externe**, le lance
 jour les mêmes 235 enregistrements au lieu d'en créer 470. Tout ce qui, dans ce cours, peut être
 lancé deux fois, peut être lancé deux fois.
 
+Avant le fork, quand la CLI GitHub était déjà connectée, il a listé les comptes qu'elle détient :
+
+    gh auth status --hostname github.com
+
+`gh repo fork` fait le fork dans le compte actif. Choisir un autre compte que la CLI détient déjà
+lance :
+
+    gh auth switch --hostname github.com --user <your-handle>
+
 Il a fait pointer ce dossier vers vos orgs, dans le répertoire `.sf` ignoré par git :
 
     sf config set target-dev-hub=helios-prod target-org=helios-dev
@@ -519,6 +541,8 @@ Documentation de la commande : [hardis:org:data:import](https://sfdx-hardis.clou
 #### Vous devriez voir
 
 - Les huit étapes de l'exécution, chacune avec ses lignes `OK`, comme dans le résultat ci-dessus
+- Si elle a demandé dans quel compte GitHub faire le fork, le compte choisi dans la ligne
+  `origin is now your-handle/sfdx-hardis-training`
 
 ### 6. Ce qu'elle vient de faire
 
@@ -530,7 +554,10 @@ Huit choses, chacune du vrai travail sur un vrai projet, et aucune à refaire vo
 - Votre propre copie du repository, son *fork*, sous votre compte GitHub. Votre clone pousse là-bas
   désormais, et continue de tirer depuis le repository de l'équipe. Le fork porte les deux branches
   qu'utilise la pipeline aujourd'hui, `integration` et `uat`, plus `main`. Vous ajouterez `preprod`
-  vous-même au [Lab 3.1](../level-3-release-manager/3-1-configure-the-pipeline-up-to-production.md)
+  vous-même au [Lab 3.1](../level-3-release-manager/3-1-configure-the-pipeline-up-to-production.md).
+  GitHub laisse les issues désactivées sur un nouveau fork, et la mise en place les active :
+  sfdx-hardis tient la liste de vos orgs de développement dans l'une d'elles, que le
+  [Lab 1.3](1-3-start-a-user-story-on-a-git-branch.md) remplit
 - Actions activées. GitHub désactive les workflows sur chaque nouveau fork jusqu'à ce que le
   propriétaire dise le contraire, et un fork où ils sont éteints ressemble exactement à une formation
   cassée
@@ -622,8 +649,9 @@ VS Code propose deux réponses :
 #### Vous devriez voir
 
 - L'icône passée du gris à la couleur, et son infobulle **Connected to GitHub**
-- Ce que le panneau ne pouvait pas montrer avant : les Pull Requests sur vos branches, et le
-  commutateur **Show feature branches**
+- Ce que le panneau ne pouvait pas montrer avant : les Pull Requests sur vos branches
+- Toujours dans le coin en haut à gauche du diagramme, comme avant la connexion : le sélecteur
+  entre **Major branches**, **Feature branches** et **Dev orgs**
 
 ### 8. Regarder la pipeline avant de toucher à quoi que ce soit
 
@@ -688,6 +716,14 @@ au lieu de vous préparer à le faire : un ticket, une branche, une modification
 déploiement.
 
 ## En cas de problème
+
+**La page Welcome n'affiche pas CUSTOM MENUS, et le menu de gauche a CI/CD (simple) juste sous Welcome.**
+VS Code n'est pas ouvert sur le clone du cours, donc l'extension n'a jamais lu
+`config/.sfdx-hardis.yml`, le fichier qui déclare les menus Training. Attendre n'y change rien.
+Ouvrez **File > Open Folder** et choisissez le dossier `sfdx-hardis-training` créé à l'étape 3,
+celui qui contient directement `sfdx-project.json`. Les menus Training apparaissent quelques
+secondes plus tard. Si ce dossier n'existe pas sur votre machine, l'étape 3 n'a pas été faite :
+refaites-la.
 
 **Il dit que la CLI GitHub n'est pas installée, alors que vous venez de l'installer.**
 VS Code était ouvert pendant l'installation et ne la voit pas encore. Fermez VS Code complètement,

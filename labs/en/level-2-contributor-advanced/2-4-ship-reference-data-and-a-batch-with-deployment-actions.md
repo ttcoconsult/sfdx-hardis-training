@@ -21,14 +21,14 @@ depends_on:
   flags: []
   config: [dataPackages, commandsPostDeploy, failValidationOnPendingManualActions]
   panels: [dataWorkbench, deploymentAction, pipeline]
-  docs: [salesforce-devops-agent-data-workspaces, salesforce-devops-work-on-user-story-deployment-actions]
+  docs: [salesforce-devops-agent-data-workspaces, salesforce-devops-work-on-user-story-deployment-actions, salesforce-devops-work-on-user-story-deployment-actions-data, salesforce-devops-work-on-user-story-deployment-actions-schedule-batch, salesforce-devops-work-on-user-story-deployment-actions-manual]
 ---
 
 # Lab 2.4 - Ship reference data and a batch with deployment actions
 
 **Level**: 2 Contributor advanced
 
-**Time**: ~50 min<!-- observed --> (observed: median 50 min, 7 learners, fastest 20 min)<!-- /observed -->
+**Time**: ~1 h 05<!-- observed --> (observed: median 1 h 08, 16 learners, fastest 20 min)<!-- /observed -->
 
 **You will**: meet the worst kind of failure, the one where nothing fails, and fix it with three
 deployment actions of three different kinds.
@@ -318,7 +318,7 @@ its path. **Target orgs** **(3)** on **All target orgs** means every org the pip
 | Scheduled Job Name (Optional) | `Helios crew capacity nightly`                     |
 | Run Only Once By Org          | yes                                                |
 
-#### Why
+#### Why the dialog changed
 
 **Schedule Batch** **(1)** replaces the script field with two of its own: **Apex Class Name**
 **(2)**, a dropdown of the classes Salesforce can run on a schedule, read from your default org and
@@ -356,7 +356,7 @@ the class is there before it runs.
 4. Check: the page reads **All email**. If it already did, there is nothing to do.
 ```
 
-#### Why
+#### Why a step by hand
 
 Some things have no API. Email deliverability is the best known one: whether an org may send
 email at all is a setting in Setup that no deployment can change. The batch emails the planner a
@@ -397,9 +397,12 @@ you meant, they will guess, and a wrong guess in production is worse than no ste
 
 1. Click **Open Git** in the notification of the last **Save**: it opens **Source Control**, where
    the action file waits
-2. Commit it, then **Save / Publish**
+2. Before you commit, bring down the commit MegaLinter has probably pushed on your branch meanwhile,
+   `chore(megalinter): apply linters fixes`: in the **...** menu at the top of **Source Control**,
+   click **Pull**
+3. Commit the action file, then **Save / Publish**
 
-#### Why
+#### Why update the Pull Request
 
 So far the actions are only on your machine. Each **Save** wrote the action into a file under
 `scripts/actions/`, named after the number of your Pull Request: `.sfdx-hardis.12.yml` for Pull
@@ -409,6 +412,12 @@ saved for Pull Request #12. Don't forget to commit and push**, followed by the p
 The Pull Request check and the deployment read the actions from that file in the branch of the
 Pull Request, not from the panel: an action that was never pushed does not run, and nothing fails
 to tell you.
+
+The MegaLinter commit is expected on this Pull Request. The **Data Workbench** writes `export.json`
+without an empty line at the end, MegaLinter's JSON formatter adds it, and pushes the result on your
+branch. GitHub does not start the checks for a commit its own robot pushed, so that commit shows its
+checks as waiting: your push of the action file starts them again. Pulling first is what lets that
+push through.
 
 #### You should now see
 
@@ -594,6 +603,17 @@ broken, but nothing stops the merge either. Click **Welcome page** > **Training:
 **Update my course**, merge the Pull Request it opens, then bring `integration` into your branch
 as in [Lab 2.1](2-1-backpromote-your-teammates-work.md) and publish: the next check stops on the step.
 
+**The push is refused, or the checks wait on `chore(megalinter): apply linters fixes`.**
+MegaLinter added the missing last line of `export.json` and pushed it on your branch, so GitHub has
+a commit your computer does not. In the **...** menu of **Source Control**, click **Pull**, then
+**Save / Publish** again: your push is what starts the checks again, with nothing to approve. The
+same robot commit is in the troubleshooting of [Lab 1.6](../level-1-contributor-basics/1-6-pull-request-deployment-check-and-merge.md).
+
+If you had already pushed everything when the robot's commit arrived, the Pull pushes nothing and
+the checks of that commit stay waiting for an approval. Open the Pull Request on GitHub: under
+**Workflow(s) awaiting approval**, click **Approve and run**, and the two checks start on the
+robot's commit.
+
 **The action file is called `.sfdx-hardis.draft.yml`, or the check stops on *Draft deployment actions file found*.**
 You added the action while the panel knew no Pull Request for your branch: the **My Pull Request**
 card read *Pull Request not created yet*, so the action was kept in a draft. The pipeline only reads
@@ -611,6 +631,14 @@ the wizard stays in `helios-dev`. Fix it there, retrieve the missing piece, and 
 The CI user cannot write the fields: the grant of step 1 is missing from `Helios_Delivery_Manager`,
 or never reached the repository. A deployment grants no field permissions to anybody by itself. Add
 them in `helios-dev`, retrieve the permission set, and publish again.
+
+**Create my lab records stops on `External_Id__c`, or says the records could not be created.**
+The twelve records are matched on `External_Id__c`, so that field needs the **External Id** box of
+step 1. In `helios-dev`, open the field in Setup, click **Edit**, tick **External Id**, save, and
+click **Create my lab records** again. Then retrieve the field with the Metadata Retriever, so that
+your branch carries the box too. If the box was already ticked, read the grey lines above the
+message: they are the Salesforce error, and a field missing from the **Helios Delivery Manager**
+grant of step 1 is the other usual cause.
 
 **The import creates duplicates every run.**
 The operation is `Insert`, not `Upsert`, or the external id is not set. Open the workspace in the
@@ -631,5 +659,8 @@ Welcome page > **Training: Level 2** > **Check my work**, then pick **Lab 2.4**.
 
 - [Data workspaces with SFDMU](https://sfdx-hardis.cloudity.com/salesforce-devops-agent-data-workspaces/)
 - [Deployment actions](https://sfdx-hardis.cloudity.com/salesforce-devops-work-on-user-story-deployment-actions/)
+- [Import data (SFDMU)](https://sfdx-hardis.cloudity.com/salesforce-devops-work-on-user-story-deployment-actions-data/)
+- [Schedule an Apex batch](https://sfdx-hardis.cloudity.com/salesforce-devops-work-on-user-story-deployment-actions-schedule-batch/)
+- [Manual step](https://sfdx-hardis.cloudity.com/salesforce-devops-work-on-user-story-deployment-actions-manual/)
 
 [Next: Lab 2.5 - Pass the code quality gate and Apex test coverage](2-5-pass-code-quality-and-apex-test-coverage.md){ .md-button .md-button--primary }

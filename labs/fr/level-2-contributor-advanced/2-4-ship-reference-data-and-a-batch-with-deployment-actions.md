@@ -5,7 +5,7 @@ description: "Un déploiement vert n'est pas une fonctionnalité qui marche. Liv
 level: 2
 lab: 4
 lang: fr
-source_rev: "2ab26832e302644acec9cbec28d360e9184464e2"
+source_rev: "6a95313d005669802491fbba8fa3702229d66c1b"
 screenshots:
   - annotated/vscode/sidebar-commands-custom-menu-2--lab-records
   - annotated/salesforce/crew-capacity-records
@@ -21,14 +21,14 @@ depends_on:
   flags: []
   config: [dataPackages, commandsPostDeploy, failValidationOnPendingManualActions]
   panels: [dataWorkbench, deploymentAction, pipeline]
-  docs: [salesforce-devops-agent-data-workspaces, salesforce-devops-work-on-user-story-deployment-actions]
+  docs: [salesforce-devops-agent-data-workspaces, salesforce-devops-work-on-user-story-deployment-actions, salesforce-devops-work-on-user-story-deployment-actions-data, salesforce-devops-work-on-user-story-deployment-actions-schedule-batch, salesforce-devops-work-on-user-story-deployment-actions-manual]
 ---
 
 # Lab 2.4 - Livrer des données de référence et un batch avec des deployment actions
 
 **Niveau** : 2 Contributeur avancé
 
-**Durée** : ~50 min<!-- observed --> (observé : médiane 50 min, 7 participants, le plus rapide 20 min)<!-- /observed -->
+**Durée** : ~1 h 05<!-- observed --> (observé : médiane 1 h 08, 16 participants, le plus rapide 20 min)<!-- /observed -->
 
 **Vous allez** : rencontrer la pire espèce d'échec, celle où rien n'échoue, et la corriger avec trois
 deployment actions de trois types différents.
@@ -325,7 +325,7 @@ lesquelles la pipeline déploie.
 | Scheduled Job Name (Optional) | `Helios crew capacity nightly`                     |
 | Run Only Once By Org          | oui                                                |
 
-#### Pourquoi
+#### Pourquoi la boîte de dialogue change
 
 **Schedule Batch** **(1)** remplace le champ de script par deux champs à lui : **Apex Class Name**
 **(2)**, une liste déroulante des classes que Salesforce peut lancer selon une planification, lues
@@ -363,7 +363,7 @@ déploie, et la classe y est avant qu'elle ne tourne.
 4. Check: the page reads **All email**. If it already did, there is nothing to do.
 ```
 
-#### Pourquoi
+#### Pourquoi une étape à la main
 
 Certaines choses n'ont pas d'API. La délivrabilité des e-mails est la plus connue : le droit pour une
 org d'envoyer des e-mails tout court est un réglage de Setup qu'aucun déploiement ne peut changer. Le
@@ -407,9 +407,12 @@ production est pire que pas d'étape du tout.
 
 1. Cliquez sur **Open Git** dans la notification du dernier **Save** : il ouvre **Source Control**,
    où le fichier d'actions attend
-2. Commitez-le, puis **Save / Publish**
+2. Avant de commiter, ramenez le commit que MegaLinter a probablement poussé entre-temps sur votre
+   branche, `chore(megalinter): apply linters fixes` : dans le menu **...** en haut de **Source
+   Control**, cliquez sur **Pull**
+3. Commitez le fichier d'actions, puis **Save / Publish**
 
-#### Pourquoi
+#### Pourquoi mettre à jour la Pull Request
 
 Pour l'instant, les actions ne sont que sur votre poste. Chaque **Save** a écrit l'action dans un
 fichier sous `scripts/actions/`, nommé d'après le numéro de votre Pull Request :
@@ -420,6 +423,12 @@ suivi du chemin du fichier.
 Le contrôle de la Pull Request et le déploiement lisent les actions dans ce fichier, sur la branche
 de la Pull Request, et non dans le panneau : une action jamais poussée ne tourne pas, et rien
 n'échoue pour vous le dire.
+
+Le commit de MegaLinter est attendu sur cette Pull Request. Le **Data Workbench** écrit
+`export.json` sans ligne vide à la fin, le formateur JSON de MegaLinter l'ajoute, et pousse le
+résultat sur votre branche. GitHub ne lance pas les contrôles pour un commit poussé par son propre
+robot, si bien que ce commit affiche des contrôles en attente : le push de votre fichier d'actions
+les relance. Le **Pull** d'abord est ce qui laisse passer ce push.
 
 #### Vous devriez voir
 
@@ -609,6 +618,18 @@ mais rien n'empêche le merge non plus. Cliquez sur **Welcome page** > **Trainin
 **Update my course**, mergez la Pull Request qu'il ouvre, puis ramenez `integration` dans votre
 branche comme au [Lab 2.1](2-1-backpromote-your-teammates-work.md) et publiez : le check suivant s'arrête sur l'étape.
 
+**Le push est refusé, ou les contrôles attendent sur `chore(megalinter): apply linters fixes`.**
+MegaLinter a ajouté la dernière ligne manquante d'`export.json` et l'a poussée sur votre branche :
+GitHub a donc un commit que votre ordinateur n'a pas. Dans le menu **...** de **Source Control**,
+cliquez sur **Pull**, puis de nouveau **Save / Publish** : c'est votre push qui relance les
+contrôles, sans rien à approuver. Le même commit du robot figure dans le dépannage du
+[Lab 1.6](../level-1-contributor-basics/1-6-pull-request-deployment-check-and-merge.md).
+
+Si vous aviez déjà tout poussé quand le commit du robot est arrivé, le Pull ne pousse rien et les
+contrôles de ce commit restent en attente d'une approbation. Ouvrez la Pull Request sur GitHub : sous
+**Workflow(s) awaiting approval**, cliquez sur **Approve and run**, et les deux contrôles démarrent
+sur le commit du robot.
+
 **Le fichier d'actions s'appelle `.sfdx-hardis.draft.yml`, ou le check s'arrête sur *Draft deployment actions file found*.**
 Vous avez ajouté l'action alors que le panneau ne connaissait aucune Pull Request pour votre
 branche : la carte **My Pull Request** indiquait *Pull Request not created yet*, et l'action a été
@@ -630,6 +651,14 @@ L'utilisateur de CI ne peut pas écrire les champs : l'autorisation de l'étape 
 aucune permission de champ à qui que ce soit. Ajoutez-les dans `helios-dev`, récupérez le permission
 set, et publiez à nouveau.
 
+**Create my lab records s'arrête sur `External_Id__c`, ou dit que les enregistrements n'ont pas pu être créés.**
+Les douze enregistrements sont rapprochés sur `External_Id__c` : ce champ a besoin de la case
+**External Id** de l'étape 1. Dans `helios-dev`, ouvrez le champ dans Setup, cliquez sur **Edit**,
+cochez **External Id**, enregistrez, et cliquez de nouveau sur **Create my lab records**. Récupérez
+ensuite le champ avec le Metadata Retriever, pour que votre branche porte aussi la case. Si la case
+était déjà cochée, lisez les lignes grises au-dessus du message : c'est l'erreur Salesforce, et un
+champ absent de l'autorisation **Helios Delivery Manager** de l'étape 1 est l'autre cause habituelle.
+
 **L'import crée des doublons à chaque exécution.**
 L'opération est `Insert` et non `Upsert`, ou l'identifiant externe n'est pas renseigné. Ouvrez le
 workspace dans le panneau **Data Workbench** et corrigez les deux là.
@@ -649,5 +678,8 @@ Welcome page > **Training: Level 2** > **Check my work**, puis choisissez le **L
 
 - [Data workspaces avec SFDMU](https://sfdx-hardis.cloudity.com/salesforce-devops-agent-data-workspaces/)
 - [Deployment actions](https://sfdx-hardis.cloudity.com/salesforce-devops-work-on-user-story-deployment-actions/)
+- [Import data (SFDMU)](https://sfdx-hardis.cloudity.com/salesforce-devops-work-on-user-story-deployment-actions-data/)
+- [Schedule an Apex batch](https://sfdx-hardis.cloudity.com/salesforce-devops-work-on-user-story-deployment-actions-schedule-batch/)
+- [Manual step](https://sfdx-hardis.cloudity.com/salesforce-devops-work-on-user-story-deployment-actions-manual/)
 
 [Suite : Lab 2.5 - Passer la barrière de qualité de code et la couverture de tests Apex](2-5-pass-code-quality-and-apex-test-coverage.md){ .md-button .md-button--primary }

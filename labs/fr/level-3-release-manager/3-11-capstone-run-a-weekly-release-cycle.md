@@ -5,7 +5,7 @@ description: "Menez une semaine entière de release manager Salesforce sans pas-
 level: 3
 lab: 11
 lang: fr
-source_rev: "310db8e756466a85af33acab572260cc1c0d70a2"
+source_rev: "891c3d2ce20a7cbc9264dc33b0bc641840a689b0"
 screenshots:
   - annotated/web/github-star-vscode-sfdx-hardis
   - annotated/vscode/welcome-custom-menu-3
@@ -21,7 +21,7 @@ depends_on:
 
 **Niveau** : 3 Release Manager
 
-**Durée** : ~50 min<!-- observed --> (observé : médiane 54 min, 7 participants, le plus rapide 20 min)<!-- /observed -->
+**Durée** : ~1 h<!-- observed --> (observé : médiane 1 h, 11 participants, le plus rapide 20 min)<!-- /observed -->
 
 **Vous allez** : faire une semaine entière d'une traite, sans pas-à-pas, et finir avec quelque chose
 que vous pourriez montrer à quelqu'un.
@@ -232,6 +232,12 @@ Dev Hub d'où créer des scratch orgs. Si vous les gardez, supprimez les secrets
 certificats JWT de votre fork (votre copie personnelle du repository du cours sur GitHub, par
 exemple `github.com/my-username/sfdx-hardis-training`) sont de vrais identifiants vers de vraies
 orgs.
+Le job nocturne de capacité des équipes du [Lab 2.4](../level-2-contributor-advanced/2-4-ship-reference-data-and-a-batch-with-deployment-actions.md) continue de tourner dans chaque org où il a été
+planifié, et vous envoie un résumé par email chaque nuit.
+**Training: Level 3** > **Clean up a training org** l'arrête, et retire l'app Helios et ses données
+de l'org choisie. Pour garder Helios et
+ne perdre que l'email, ouvrez **Setup** > **Scheduled Jobs** dans l'org et cliquez sur **Del** sur la
+ligne du job, `Helios crew capacity nightly` si vous avez gardé le nom du lab.
 
 Trois : gardez les promotion branches comme exception. Le [Lab 3.10](3-10-promote-a-subset-with-promotion-branches.md) vous en a fait
 assembler une, et cette semaine a remis la pipeline en place. Sur un vrai projet la pression va dans

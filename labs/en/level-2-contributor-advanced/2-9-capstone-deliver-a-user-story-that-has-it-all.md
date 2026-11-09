@@ -13,14 +13,14 @@ depends_on:
   flags: []
   config: [commandsPostDeploy, autoCleanTypes]
   panels: [pipeline, deploymentAction, dataWorkbench]
-  docs: [salesforce-devops-work-on-user-story-deployment-actions]
+  docs: [salesforce-devops-work-on-user-story-deployment-actions, salesforce-devops-work-on-user-story-deployment-actions-data]
 ---
 
 # Lab 2.9 - Capstone: deliver a User Story that has it all
 
 **Level**: 2 Contributor advanced
 
-**Time**: ~40 min<!-- observed --> (observed: median 43 min, 7 learners, fastest 11 min)<!-- /observed -->
+**Time**: ~50 min<!-- observed --> (observed: median 51 min, 16 learners, fastest 19 min)<!-- /observed -->
 
 **You will**: deliver one story that contains a dependency to check, a data deployment action and a
 teammate working on the same permission set, with no step-by-step.

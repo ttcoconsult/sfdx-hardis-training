@@ -30,7 +30,7 @@ depends_on:
 
 **Level**: 2 Contributor advanced
 
-**Time**: ~35 min<!-- observed --> (observed: median 37 min, 7 learners, fastest 10 min)<!-- /observed -->
+**Time**: ~40 min<!-- observed --> (observed: median 42 min, 16 learners, fastest 25 min)<!-- /observed -->
 
 **You will**: face a real merge conflict on two files that conflict very differently, and resolve
 both without losing anybody's work.
@@ -48,6 +48,9 @@ flow and the same permission set as you. She merged this morning. You did not.
 
 - [ ] [Lab 2.6](2-6-permission-sets-and-profiles.md) finished and merged
 - [ ] Nothing waiting in the **Source Control** panel that you still care about
+- [ ] **SF Merge Driver**, at the bottom right of VS Code, shows a grey circle: the driver is off.
+      If the circle is green, click it to turn the driver off, or it solves the conflicts this lab
+      is about before you see them
 
 ## Steps
 
@@ -63,14 +66,33 @@ Refresher: [Lab 1.5](../level-1-contributor-basics/1-5-retrieve-commit-and-publi
 
    ![The New User Story card of the DevOps Pipeline panel](../../_assets/annotated/vscode/pipeline-cards--new-user-story.png)
 
-2. In `helios-dev`, open the flow `Installation Assign Crew` and add a decision so that an
-   installation whose roof type is `Flat` gets a crew of at least 3, whatever else the flow decided
-3. Connect it to the same assignment the flow already ends on, so the new rule runs after the
-   status change
-4. **Save**, then **Activate**: each save of a flow is a new version, and only the active one runs
-5. On the permission set `Helios Delivery Manager`, grant edit access on
-   `Installation__c.Crew_Notes__c`, so a planner can say why a crew was raised
-6. Retrieve the flow and the permission set, and commit them
+2. In `helios-dev`, open **Setup > Flows**, then **Installation Assign Crew**. The flow ends on one
+   assignment, **Move To Scheduled**, the **(1)** of the picture under **You should now see**. The
+   rule you add: an installation whose roof type is `Flat` gets a crew of at least 3, whatever else
+   the flow decided
+3. Click the **+** on the line below **Move To Scheduled**, and pick **Decision**
+4. Fill the decision in:
+
+   | Field                                    | Value                                                          |
+   |------------------------------------------|----------------------------------------------------------------|
+   | **Label**                                | `Flat Roof Minimum`                                            |
+   | **Label** of the first outcome           | `Too small for a flat roof`                                    |
+   | First condition                          | `Roof Type` of the triggering Installation, **Equals**, `Flat` |
+   | Second condition, with **Add Condition** | `Crew Size` of the triggering Installation, **Less Than**, `3` |
+   | **When to Execute Outcome**              | **All Conditions Are Met**                                     |
+   | **Label** of the **Default Outcome**     | `Crew is enough`                                               |
+
+5. The canvas now shows two branches under the decision. On the **Too small for a flat roof**
+   branch, click the **+** and pick **Assignment**. **Label** `Raise Crew To Three`, then one line:
+   `Crew Size` of the triggering Installation, **Equals**, `3`
+6. **Save As New Version**, then **Activate**: the flow is active, so each save is a new version,
+   and only the active one runs
+7. On the permission set `Helios Delivery Manager`, grant edit access on
+   `Installation__c.Crew_Notes__c`, so a planner can say why a crew was raised: **Setup >
+   Permission Sets > Helios Delivery Manager > Object Settings > Installations > Edit**, tick
+   **Edit Access** on `Crew Notes`, **Save**
+8. Retrieve the flow and the permission set the usual way: **Commit changes**, **Recent Changes**,
+   tick both, retrieve, then stage the two files and commit them from **Source Control**
 
 !!! warning "Careful"
     Stop there: do not publish yet. The next step needs your change to exist before Mariia's work
@@ -111,11 +133,11 @@ can genuinely review and merge it.
 3. With **Yes**, let the panel wait for the checks, two to four minutes: it merges the Pull Request
    and writes **Pull Request merged into its base branch**. If you merge it on GitHub while the
    panel is still waiting, it notices and stops
-
-  !!! tip "If you answered No"
-      With **No**, open the address it printed, have a look at **Files changed**, and merge it
-      with **Squash and merge** once the checks are green: the same clicks as
-      [Lab 2.1](2-1-backpromote-your-teammates-work.md), step 1b, where each one has its screenshot.
+4. With **No**, click **Open the Pull Request** at the bottom of the panel, have a look at **Files
+   changed**, and merge it with **Squash and merge** once the checks are green: the same clicks as
+   [Lab 2.1](2-1-backpromote-your-teammates-work.md), step 1b, where each one has its screenshot.
+   The panel shows that button whatever you answered: after **Yes**, it opens the merged Pull
+   Request, if you want to read what Mariia changed
 
 #### Why after your change
 
@@ -258,37 +280,29 @@ This one is mechanical, and you can decide it without understanding the XML: bot
 belong. Mariia granted one field, you granted another, and a permission set holds as many as it
 needs.
 
-#### Do: make two blocks of the result
+#### Do: read the result, then complete the merge
 
-1. Now read the **Result** **(1)** before anything else
+1. Read the **Result** **(1)** before anything else: it holds two complete `<fieldPermissions>`
+   blocks, Mariia's `Crew_Capacity_Cap__c` first and your `Crew_Notes__c` second
 
    ![The merge editor after both sides were accepted, with Complete Merge](../../_assets/annotated/vscode/git-merge-editor-accepted--result.png)
 
-2. Type it in the **Result** pane: after the first `<field>` line, add the four lines that close the
-   first block and open the second. Copy them from here: nobody is asked to write XML from memory
+2. Click **Complete Merge** **(2)**
 
-   ```xml title="Edit this file"
-           <readable>true</readable>
-       </fieldPermissions>
-       <fieldPermissions>
-           <editable>true</editable>
-   ```
+#### Why read it
 
-3. Then click **Complete Merge** **(2)**
-
-#### Why two blocks
-
-The editor kept both lines, and put them in the same block: one `<fieldPermissions>` with two
-`<field>` lines, which Salesforce refuses. Git merges lines, not permissions. You want two complete
-blocks, one per field, Mariia's `Crew_Capacity_Cap__c` first and your `Crew_Notes__c` second. The
-under the hood section below shows the result you are aiming at.
+Each of you added a whole block, and the merge editor compares each side with the version you both
+started from, so taking both gives two blocks with nothing to type. Read it anyway: one
+`<fieldPermissions>` block names one field, and Salesforce refuses a block with two `<field>` lines.
+If your **Result** looks like that, **If it goes wrong** at the end of this lab has the fix.
 
 Take both is the right answer for almost every permission set conflict. Choosing one side is how
 a teammate's permission quietly disappears, and nobody notices until somebody cannot see a field.
 
 <details markdown="1"><summary>Under the hood: what the conflict actually looked like</summary>
 
-Git conflicts on lines, not on XML, so the markers landed inside one block rather than around two:
+Git conflicts on lines, not on XML, so the markers it writes in the file landed inside one block
+rather than around two:
 
 ```xml title="Output"
     <fieldPermissions>
@@ -302,10 +316,11 @@ Git conflicts on lines, not on XML, so the markers landed inside one block rathe
     </fieldPermissions>
 ```
 
-Once you added the four lines, the result holds two complete blocks, in alphabetical order, which is
-how Salesforce writes them anyway:
+The merge editor does not show you those markers. It compares each side with the version you both
+started from, finds a whole block added on each side, and taking both keeps the two blocks, in
+alphabetical order, which is how Salesforce writes them anyway:
 
-```xml title="Edit this file"
+```xml title="Output"
     <fieldPermissions>
         <editable>true</editable>
         <field>Installation__c.Crew_Capacity_Cap__c</field>
@@ -368,12 +383,13 @@ your minimum applies only when it does not exceed Mariia's cap.
    the end of the `Installation Assign Crew` row, **View Details and Versions**, and open the
    version at the top of the list. Opening the flow from its name can land on an older version,
    without her **Crew Over Cap** decision
-4. Add your flat-roof rule again, before her cap. Your decision **(1)** comes first, her **Crew Over
-   Cap** decision **(2)** last
+4. Add your flat-roof rule again, before her cap: click the **+** between **Move To Scheduled** and
+   her **Crew Over Cap** decision, and build the same decision and assignment as in step 1, with
+   the same names. Your decision **(1)** comes first, her **Crew Over Cap** decision **(2)** last
 
    ![The rebuilt flow: the flat roof minimum first, the cap last](../../_assets/annotated/salesforce/flow-builder-assign-crew-full.png)
 
-5. **Save**, then **Activate**
+5. **Save As New Version**, then **Activate**
 6. Come back to VS Code, retrieve the rebuilt flow with **Commit changes**, and stage it in
    **Source Control**, next to the permission set. Do not commit yet: a merge ends with one commit,
    and the next step makes it
@@ -457,6 +473,17 @@ the same kind together: all the assignments, then all the decisions. If your mer
 element between two blocks of another kind, move it back up next to its own kind. The order inside
 each group does not matter, the grouping does.
 
+**The Result of the permission set shows one block with two `<field>` lines.**
+Before you click **Complete Merge**, type in the **Result** pane: after the first `<field>` line, add
+the four lines that close the first block and open the second. Copy them from here:
+
+```xml title="Edit this file"
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+```
+
 **`Element field is duplicated at this location in type PermissionSetFieldPermissions`.**
 You kept both sides inside a single grant instead of keeping both grants. One `<fieldPermissions>`
 block names one field: the fix is two blocks, not one block with two `<field>` lines.
@@ -464,6 +491,13 @@ block names one field: the fix is two blocks, not one block with two `<field>` l
 **The flow will not deploy after the merge: "duplicate element name".**
 You kept both sides of an element that can only exist once. Flow element names are unique. Rename or
 remove one.
+
+**Merge Changes lists no permission set, or no file at all.**
+The SF Merge Driver merged them for you: its item at the bottom right of VS Code shows a green
+circle. Open the permission set and check that it holds the two blocks of step 5. If the flow merged
+too, open it in Flow Builder and check it against step 6: the driver merges the XML, it does not
+decide which rule wins. Then click the item to turn the driver off, before [Lab 3.10](../level-3-release-manager/3-10-promote-a-subset-with-promotion-branches.md) needs the
+conflicts too.
 
 **You lost your change entirely.**
 You accepted Mariia's side on the whole file. In the **Source Control** panel, the **...** menu >

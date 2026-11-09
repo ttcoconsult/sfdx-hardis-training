@@ -5,7 +5,7 @@ description: "Une permission accordée sur un profil s'évapore après un déplo
 level: 2
 lab: 6
 lang: fr
-source_rev: "2665df0ee4c47cddf6ed36fa446547b9a108181b"
+source_rev: "3107b09edb5ceb677424c995aa749b40c8d7963f"
 screenshots:
   - annotated/vscode/pipeline-cards--new-user-story
   - annotated/vscode/pipeline-packages-menu--package-xml
@@ -22,7 +22,7 @@ depends_on:
 
 **Niveau** : 2 Contributeur avancé
 
-**Durée** : ~30 min<!-- observed --> (observé : médiane 34 min, 7 participants, le plus rapide 10 min)<!-- /observed -->
+**Durée** : ~30 min<!-- observed --> (observé : médiane 31 min, 16 participants, le plus rapide 10 min)<!-- /observed -->
 
 **Vous allez** : courir après une permission qui s'évapore entre un déploiement vert et l'org cible,
 et découvrir qu'elle a été retirée exprès.
@@ -119,21 +119,25 @@ Votre commit contenait la permission. Vous l'avez vue dans le diff avant de cliq
 
 1. Ouvrez le panneau **Source Control** et regardez l'historique de votre branche
 2. Lisez le commit que **Save / Publish** a fait après le vôtre, `chore(sfdx-hardis): clean sfdx project`
-3. Trouvez le réglage dans le panneau **Pipeline Settings**, onglet **Salesforce Project**
+3. Trouvez le réglage qui l'a fait : ouvrez le panneau **DevOps Pipeline**, puis **Configure
+   Pipeline Settings** dans le menu engrenage en haut à droite, et cliquez sur l'onglet **Salesforce
+   Project**. Le réglage s'appelle **Auto-Cleaning types**, et sa liste contient **Minimize
+   Profiles**. L'étape 6 revient sur ce panneau, avec son image
 
 #### Pourquoi
 
 Ce commit ressort aussitôt la permission que vous aviez ajoutée, avec toutes les autres sections du
 fichier qu'un permission set pourrait porter. Ce qui reste est ce que seul un profil peut contenir.
 
-C'est un réglage de projet appelé `minimizeProfiles`, l'une des règles de nettoyage que ce projet a
-activées, et vous pouvez le voir dans le panneau **Pipeline Settings**, onglet **Salesforce
-Project**.
+C'est une règle de nettoyage que ce projet a activée. Le panneau l'affiche par son libellé,
+**Minimize Profiles** dans **Auto-Cleaning types**. Le fichier de configuration du projet,
+`config/.sfdx-hardis.yml`, l'enregistre par sa clé, `minimizeProfiles` dans la liste
+`autoCleanTypes`, et c'est sous ce nom que la documentation et la suite de ce lab en parlent.
 
 #### Vous devriez voir
 
 - Le commit de nettoyage qui retire votre accès du profil
-- `minimizeProfiles` listé dans l'onglet **Salesforce Project**
+- **Minimize Profiles** listé dans **Auto-Cleaning types**, dans l'onglet **Salesforce Project**
 
 ### 4. Comprendre pourquoi un projet ferait une chose pareille
 
@@ -231,7 +235,8 @@ Objectif : vous savez quel réglage nettoie quoi, et dans quel onglet des régla
 
 #### À faire
 
-1. Ouvrez le panneau **DevOps Pipeline**, puis **Configure Pipeline Settings** dans le menu engrenage
+1. Ouvrez le panneau **DevOps Pipeline**, puis **Configure Pipeline Settings** dans le menu engrenage,
+   comme à l'étape 3
 2. Laissez le sélecteur de portée **(1)** sur **Global Settings** : ce sont des règles de projet,
    identiques pour chaque branche
 
@@ -239,10 +244,10 @@ Objectif : vous savez quel réglage nettoie quoi, et dans quel onglet des régla
 
 3. Trouvez les deux réglages du tableau ci-dessous dans l'onglet **Salesforce Project** **(2)**
 
-| Réglage                            | Onglet                         | Ce dont il protège                                                                                        |
-|------------------------------------|--------------------------------|-----------------------------------------------------------------------------------------------------------|
-| `autoCleanTypes: minimizeProfiles` | **Salesforce Project** **(2)** | Un profil qui porte des permissions dont la place est sur un permission set                               |
-| `autoRemoveUserPermissions`        | **Salesforce Project** **(2)** | Des permissions utilisateur précises qui ne doivent jamais voyager entre orgs, quel qu'en soit le porteur |
+| Dans le panneau                                              | Dans `config/.sfdx-hardis.yml`     | Onglet                         | Ce dont il protège                                                                                        |
+|--------------------------------------------------------------|------------------------------------|--------------------------------|-----------------------------------------------------------------------------------------------------------|
+| **Minimize Profiles**, dans la liste **Auto-Cleaning types** | `autoCleanTypes: minimizeProfiles` | **Salesforce Project** **(2)** | Un profil qui porte des permissions dont la place est sur un permission set                               |
+| **Auto-Remove User Permissions on profiles**                 | `autoRemoveUserPermissions`        | **Salesforce Project** **(2)** | Des permissions utilisateur précises qui ne doivent jamais voyager entre orgs, quel qu'en soit le porteur |
 
 #### Pourquoi
 
@@ -295,7 +300,8 @@ Documentation de la commande : [hardis:work:save](https://sfdx-hardis.cloudity.c
 
 #### Vous devriez voir
 
-- `minimizeProfiles` et `autoRemoveUserPermissions` dans l'onglet **Salesforce Project** **(2)**,
+- **Auto-Cleaning types**, avec **Minimize Profiles** dedans, et **Auto-Remove User Permissions on
+  profiles** dans l'onglet **Salesforce Project** **(2)**,
   et l'onglet **Deployment** **(3)** à côté
 
 ## Ce que vous devez voir
@@ -321,7 +327,7 @@ de chaque objet de l'org, son application et ses types d'enregistrement par déf
 ses permissions utilisateur : ils restent exprès. S'il porte encore des
 permissions de champ, d'objet ou de classe, il a été commité après une récupération et n'est
 jamais passé par le nettoyage. Vérifiez que
-`minimizeProfiles` est toujours listé dans l'onglet **Salesforce Project** de **Pipeline Settings**,
+**Minimize Profiles** est toujours listé dans **Auto-Cleaning types**, dans l'onglet **Salesforce Project** de **Pipeline Settings**,
 puis refaites **Save / Publish**. Ne raccourcissez pas le fichier à la main.
 
 **Un déploiement refuse le profil avec `no Layout named ...` ou `no CustomTab named ...`.**
@@ -347,7 +353,9 @@ cible n'a pas. Le message la nomme, sous la forme `Objet-Nom de la présentation
    manager, ou en la désactivant dans l'org où vous construisez, puis récupérez le profil de
    nouveau. Une langue : passez votre utilisateur en anglais dans l'org cible, **votre photo >
    Settings > Language & Time Zone**, et renommez-y la présentation. Tout le reste, sur un objet
-   que votre projet n'utilise pas : la ligne n'a rien à faire dans le repository. Ouvrez le
+   que votre projet n'utilise pas : la ligne n'a rien à faire dans le repository.
+   `FlowRecord-Flow Layout` en fait partie : certaines orgs ont une présentation sur l'objet
+   standard `FlowRecord`, d'autres n'en ont aucune. Ouvrez le
    fichier du profil, supprimez le bloc `<layoutAssignments>` qui nomme la présentation, ou le
    bloc `<tabVisibilities>` qui nomme l'onglet, commitez, et faites **Save / Publish** : sur la
    branche de ce lab quand c'est sa propre Pull Request qui est rouge, dans une User Story **Fix**

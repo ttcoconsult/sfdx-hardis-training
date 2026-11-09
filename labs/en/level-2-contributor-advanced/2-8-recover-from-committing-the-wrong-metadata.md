@@ -23,7 +23,7 @@ depends_on:
 
 **Level**: 2 Contributor advanced
 
-**Time**: ~20 min<!-- observed --> (observed: median 20 min, 7 learners, fastest 6 min)<!-- /observed -->
+**Time**: ~25 min<!-- observed --> (observed: median 28 min, 16 learners, fastest 10 min)<!-- /observed -->
 
 **You will**: deliberately over-select at publish time, see what that does to a Pull Request, and
 learn the two recovery paths.
@@ -283,6 +283,11 @@ Command documentation: [hardis:work:resetselection](https://sfdx-hardis.cloudity
 - [ ] Your layout change still present in `helios-dev`
 
 ## If it goes wrong
+
+**The check of the over-wide Pull Request goes red on a Profile, with `no Layout named ...`.**
+It can: the Profile came whole, with page layouts the target org may not have, the error of
+[Lab 2.6](2-6-permission-sets-and-profiles.md). Do not fix the Profile here. The reset of step 3
+takes it out of the Pull Request, and the check of step 5 runs on your layout alone.
 
 **The reset says you have changes waiting.**
 Publish them or discard them in the **Source Control** panel first, then run the reset again.
