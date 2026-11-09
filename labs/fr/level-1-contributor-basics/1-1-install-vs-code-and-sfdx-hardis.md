@@ -5,7 +5,7 @@ description: "Installez Git, Node.js, VS Code et l'extension sfdx-hardis, puis l
 level: 1
 lab: 1
 lang: fr
-source_rev: "827c3b1b2bbcd96d955be577664d7f1629c4c73f"
+source_rev: "1ce6da585afd0a877f290f1baac04e4b5274b7be"
 screenshots:
   - annotated/web/git-download
   - annotated/web/vscode-download
@@ -48,7 +48,7 @@ et Bitbucket fonctionnent tous pareil à partir d'ici.
     gratuites, repository d'entraînement, données fictives. Rien de tout cela n'a sa place sur un
     vrai projet.
 
-!!! tip "Pas de VS Code ? Un onglet ou un autre éditeur suffit"
+!!! tip "Pas de VS Code ? Agentforce Vibes ou Cursor fonctionnent aussi"
     [Agentforce Vibes](https://www.salesforce.com/agentforce/developers/vibe-coding/ide/) est VS Code dans Google Chrome, lancé depuis une org Salesforce :
     une sandbox de développement, ou l'org Developer Edition gratuite pour laquelle le
     [Lab 1.2](1-2-create-your-dev-hub-scratch-orgs-and-pipeline.md) vous inscrit, ce qui veut dire
@@ -60,9 +60,13 @@ et Bitbucket fonctionnent tous pareil à partir d'ici.
     sont les mêmes, et les captures d'écran aussi : elles ont été prises dans VS Code de bureau, qui
     est le même éditeur.
 
-    [Cursor](https://cursor.com/) et les autres éditeurs construits sur VS Code fonctionnent pareil, et depuis
-    le même Open VSX. Quel que soit celui que vous utilisez, la suite de ce lab est écrite pour ce
-    que vous y voyez.
+    [Cursor](https://cursor.com/) fonctionne pareil, depuis le même Open VSX. Que vous utilisiez
+    VS Code, Agentforce Vibes ou Cursor, la suite de ce lab est écrite pour ce que vous y voyez.
+
+    Choisissez maintenant et gardez le même jusqu'à la fin du cours. Les scratch orgs que crée le
+    Lab 1.2 ne sont connectées que dans l'éditeur qui les a créées. Lancez la mise en place depuis un
+    autre éditeur, et l'environnement de formation n'en trouve aucune et en demande trois nouvelles,
+    ce que le Dev Hub refuse tant que les trois premières sont actives.
 
 ## Avant de commencer
 
@@ -250,6 +254,9 @@ Les dépendances qu'il faut connaître par leur nom :
 - **SFDMU** - charge et extrait des enregistrements, c'est ainsi que vos orgs reçoivent leurs données
 - **sfdx-git-delta** - calcule ce qui a changé entre deux versions du projet, c'est ce que les
   déploiements envoient
+- **sfdx-browserforce-plugin** (Browserforce) - modifie les paramètres de Setup qui ne se déploient
+  pas, en cliquant dans Setup depuis un navigateur que personne ne voit, quand un déploiement le
+  demande
 - **Salesforce Extension Pack** - l'outillage Salesforce officiel pour VS Code
 
 Les installations sont la partie la plus longue de ce lab, et la seule que vous ne referez jamais.
@@ -263,6 +270,7 @@ vous-même, par exemple :
     sf plugins install sfdx-hardis
     sf plugins install sfdmu
     sf plugins install sfdx-git-delta
+    sf plugins install sfdx-browserforce-plugin
 
 puis il a relancé `sf version` et `sf plugins` et comparé les réponses aux versions publiées sur le
 registre npm. Cette comparaison est toute la raison d'être du panneau : une pipeline casse de façon

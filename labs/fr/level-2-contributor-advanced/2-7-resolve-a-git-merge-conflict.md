@@ -5,7 +5,7 @@ description: "Une collègue a mergé en premier sur le même flow et le même pe
 level: 2
 lab: 7
 lang: fr
-source_rev: "2f56c1f3f73e1f90b004e1cc4119969d9e8d3952"
+source_rev: "3d701f74e0165db3a3070343c631872485f76d36"
 screenshots:
   - annotated/salesforce/flow-builder-assign-crew
   - annotated/salesforce/flow-builder-assign-crew-full
@@ -30,7 +30,7 @@ depends_on:
 
 **Niveau** : 2 Contributeur avancé
 
-**Durée** : ~35 min<!-- observed --> (observé : médiane 37 min, 7 participants, le plus rapide 10 min)<!-- /observed -->
+**Durée** : ~40 min<!-- observed --> (observé : médiane 42 min, 16 participants, le plus rapide 25 min)<!-- /observed -->
 
 **Vous allez** : affronter un vrai conflit de merge sur deux fichiers qui entrent en conflit de façon
 très différente, et résoudre les deux sans perdre le travail de personne.
@@ -49,6 +49,9 @@ flow et le même permission set que vous. Elle a mergé ce matin. Pas vous.
 
 - [ ] [Lab 2.6](2-6-permission-sets-and-profiles.md) terminé et mergé
 - [ ] Rien en attente dans le panneau **Source Control** auquel vous teniez encore
+- [ ] **SF Merge Driver**, en bas à droite de VS Code, affiche un rond gris : le driver est éteint.
+      Si le rond est vert, cliquez dessus pour l'éteindre, sinon il résout les conflits dont parle
+      ce lab avant que vous ne les voyiez
 
 ## Les étapes
 
@@ -65,17 +68,34 @@ Rappel : [Lab 1.5](../level-1-contributor-basics/1-5-retrieve-commit-and-publish
 
    ![La carte New User Story du panneau DevOps Pipeline](../../_assets/annotated/vscode/pipeline-cards--new-user-story.png)
 
-2. Dans `helios-dev`, ouvrez le flow `Installation Assign Crew` et ajoutez une décision pour qu'une
-   installation dont le type de toiture est `Flat` reçoive une équipe d'au moins 3 personnes, quoi
-   que le flow ait décidé par ailleurs
-3. Reliez-la à la même affectation sur laquelle le flow se termine déjà, pour que la nouvelle règle
-   tourne après le changement de statut
-4. **Save**, puis **Activate** : chaque enregistrement d'un flow crée une nouvelle version, et seule
-   la version active s'exécute
-5. Sur le permission set `Helios Delivery Manager`, accordez l'accès en écriture sur
+2. Dans `helios-dev`, ouvrez **Setup > Flows**, puis **Installation Assign Crew**. Le flow se
+   termine sur une affectation, **Move To Scheduled**, le **(1)** de l'image sous **Vous devriez
+   voir**. La règle que vous ajoutez : une installation dont le type de toiture est `Flat` reçoit
+   une équipe d'au moins 3 personnes, quoi que le flow ait décidé par ailleurs
+3. Cliquez sur le **+** de la ligne sous **Move To Scheduled**, et choisissez **Decision**
+4. Remplissez la décision :
+
+   | Champ                                      | Valeur                                                         |
+   |--------------------------------------------|----------------------------------------------------------------|
+   | **Label**                                  | `Flat Roof Minimum`                                            |
+   | **Label** du premier résultat              | `Too small for a flat roof`                                    |
+   | Première condition                         | `Roof Type` de l'Installation déclencheuse, **Equals**, `Flat` |
+   | Deuxième condition, avec **Add Condition** | `Crew Size` de l'Installation déclencheuse, **Less Than**, `3` |
+   | **When to Execute Outcome**                | **All Conditions Are Met**                                     |
+   | **Label** du **Default Outcome**           | `Crew is enough`                                               |
+
+5. Le canevas montre maintenant deux branches sous la décision. Sur la branche **Too small for a
+   flat roof**, cliquez sur le **+** et choisissez **Assignment**. **Label** `Raise Crew To Three`,
+   puis une ligne : `Crew Size` de l'Installation déclencheuse, **Equals**, `3`
+6. **Save As New Version**, puis **Activate** : le flow est actif, donc chaque enregistrement crée
+   une nouvelle version, et seule la version active s'exécute
+7. Sur le permission set `Helios Delivery Manager`, accordez l'accès en écriture sur
    `Installation__c.Crew_Notes__c`, pour qu'un planificateur puisse dire pourquoi une équipe a été
-   renforcée
-6. Faites un retrieve du flow et du permission set, et commitez-les
+   renforcée : **Setup > Permission Sets > Helios Delivery Manager > Object Settings >
+   Installations > Edit**, cochez **Edit Access** sur `Crew Notes`, **Save**
+8. Faites un retrieve du flow et du permission set comme d'habitude : **Commit changes**, **Recent
+   Changes**, cochez les deux, retrieve, puis indexez les deux fichiers et commitez-les depuis
+   **Source Control**
 
 !!! warning "Attention"
     Arrêtez-vous là : ne publiez pas encore. L'étape suivante a besoin que votre modification
@@ -117,10 +137,11 @@ fork pour que vous puissiez réellement le relire et le merger.
    Request et écrit **Pull Request merged into its base branch**. Si vous la mergez sur GitHub
    pendant que le panneau attend encore, il s'en aperçoit et s'arrête
 
-  !!! tip "Si vous avez répondu No"
-      Avec **No**, ouvrez l'adresse affichée, jetez un œil à **Files changed**, et mergez-la avec
-      **Squash and merge** une fois les checks verts : les mêmes clics qu'au
-      [Lab 2.1](2-1-backpromote-your-teammates-work.md), étape 1b, où chacun a sa capture d'écran.
+4. Avec **No**, cliquez sur **Open the Pull Request** en bas du panneau, jetez un œil à **Files
+   changed**, et mergez-la avec **Squash and merge** une fois les checks verts : les mêmes clics
+   qu'au [Lab 2.1](2-1-backpromote-your-teammates-work.md), étape 1b, où chacun a sa capture
+   d'écran. Le panneau affiche ce bouton quelle que soit votre réponse : après **Yes**, il ouvre la
+   Pull Request mergée, si vous voulez lire ce que Mariia a modifié
 
 #### Pourquoi après votre modification
 
@@ -268,31 +289,22 @@ Celui-ci est mécanique, et vous pouvez trancher sans comprendre le XML : les de
 place. Mariia a accordé un champ, vous en avez accordé un autre, et un permission set en contient
 autant qu'il en faut.
 
-#### À faire : faire deux blocs du résultat
+#### À faire : lire le résultat, puis terminer le merge
 
-1. Lisez maintenant le **Result** **(1)** avant toute chose
+1. Lisez le **Result** **(1)** avant toute chose : il contient deux blocs `<fieldPermissions>`
+   complets, le `Crew_Capacity_Cap__c` de Mariia en premier et votre `Crew_Notes__c` en second
 
    ![L'éditeur de merge après avoir accepté les deux côtés, avec Complete Merge](../../_assets/annotated/vscode/git-merge-editor-accepted--result.png)
 
-2. Tapez-le dans le volet **Result** : après la première ligne `<field>`, ajoutez les quatre lignes
-   qui ferment le premier bloc et ouvrent le second. Copiez-les d'ici : on ne demande à personne
-   d'écrire du XML de mémoire
+2. Cliquez sur **Complete Merge** **(2)**
 
-   ```xml title="À modifier dans le fichier"
-           <readable>true</readable>
-       </fieldPermissions>
-       <fieldPermissions>
-           <editable>true</editable>
-   ```
+#### Pourquoi le lire
 
-3. Cliquez ensuite sur **Complete Merge** **(2)**
-
-#### Pourquoi deux blocs
-
-L'éditeur a gardé les deux lignes, et les a mises dans le même bloc : un seul `<fieldPermissions>`
-avec deux lignes `<field>`, ce que Salesforce refuse. Git merge des lignes, pas des permissions. Vous
-voulez deux blocs complets, un par champ, le `Crew_Capacity_Cap__c` de Mariia en premier et votre
-`Crew_Notes__c` en second. La section sous le capot ci-dessous montre le résultat que vous visez.
+Chacun de vous a ajouté un bloc entier, et l'éditeur de merge compare chaque côté à la version dont
+vous êtes partis tous les deux : garder les deux donne donc deux blocs, sans rien taper. Lisez-le
+quand même : un bloc `<fieldPermissions>` nomme un seul champ, et Salesforce refuse un bloc avec deux
+lignes `<field>`. Si votre **Result** ressemble à cela, **En cas de problème** à la fin de ce lab
+donne la correction.
 
 Prendre les deux est la bonne réponse pour presque tous les conflits de permission set. Choisir
 un côté est la façon dont la permission d'un collègue disparaît en silence, sans que personne s'en
@@ -300,8 +312,8 @@ aperçoive avant que quelqu'un ne voie plus un champ.
 
 <details markdown="1"><summary>Sous le capot : à quoi ressemblait vraiment le conflit</summary>
 
-Git entre en conflit sur des lignes, pas sur du XML : les marqueurs ont donc atterri à l'intérieur
-d'un bloc plutôt qu'autour de deux :
+Git entre en conflit sur des lignes, pas sur du XML : les marqueurs qu'il écrit dans le fichier ont
+donc atterri à l'intérieur d'un bloc plutôt qu'autour de deux :
 
 ```xml title="Résultat"
     <fieldPermissions>
@@ -315,10 +327,11 @@ d'un bloc plutôt qu'autour de deux :
     </fieldPermissions>
 ```
 
-Une fois les quatre lignes ajoutées, le résultat contient deux blocs complets, par ordre
-alphabétique, ce qui est de toute façon la façon dont Salesforce les écrit :
+L'éditeur de merge ne vous montre pas ces marqueurs. Il compare chaque côté à la version dont vous
+êtes partis tous les deux, trouve un bloc entier ajouté de chaque côté, et garder les deux conserve
+les deux blocs, par ordre alphabétique, ce qui est de toute façon la façon dont Salesforce les écrit :
 
-```xml title="À modifier dans le fichier"
+```xml title="Résultat"
     <fieldPermissions>
         <editable>true</editable>
         <field>Installation__c.Crew_Capacity_Cap__c</field>
@@ -385,12 +398,14 @@ le plafond de Mariia.
    menu au bout de la ligne `Installation Assign Crew`, **View Details and Versions**, et ouvrez la
    version en haut de la liste. Ouvrir le flow depuis son nom peut tomber sur une version plus
    ancienne, sans sa décision **Crew Over Cap**
-4. Rajoutez votre règle de toiture plate, avant son plafond. Votre décision **(1)** vient en premier,
-   sa décision **Crew Over Cap** **(2)** en dernier
+4. Rajoutez votre règle de toiture plate, avant son plafond : cliquez sur le **+** entre **Move To
+   Scheduled** et sa décision **Crew Over Cap**, et construisez la même décision et la même
+   affectation qu'à l'étape 1, avec les mêmes noms. Votre décision **(1)** vient en premier, sa
+   décision **Crew Over Cap** **(2)** en dernier
 
    ![Le flow reconstruit : le minimum de toiture plate d'abord, le plafond en dernier](../../_assets/annotated/salesforce/flow-builder-assign-crew-full.png)
 
-5. **Save**, puis **Activate**
+5. **Save As New Version**, puis **Activate**
 6. Revenez dans VS Code, faites un retrieve du flow reconstruit avec **Commit changes**, et indexez-le
    dans **Source Control**, à côté du permission set. Ne commitez pas encore : un merge se termine
    par un seul commit, et l'étape suivante le fait
@@ -477,6 +492,18 @@ les éléments de même nature : toutes les affectations, puis toutes les décis
 déposé un élément conservé entre deux blocs d'une autre nature, remontez-le auprès des siens. L'ordre
 à l'intérieur de chaque groupe n'a pas d'importance, le groupement si.
 
+**Le Result du permission set montre un seul bloc avec deux lignes `<field>`.**
+Avant de cliquer sur **Complete Merge**, tapez dans le volet **Result** : après la première ligne
+`<field>`, ajoutez les quatre lignes qui ferment le premier bloc et ouvrent le second. Copiez-les
+d'ici :
+
+```xml title="À modifier dans le fichier"
+        <readable>true</readable>
+    </fieldPermissions>
+    <fieldPermissions>
+        <editable>true</editable>
+```
+
 **`Element field is duplicated at this location in type PermissionSetFieldPermissions`.**
 Vous avez gardé les deux côtés à l'intérieur d'une seule autorisation au lieu de garder les deux
 autorisations. Un bloc `<fieldPermissions>` nomme un champ : la correction est deux blocs, pas un
@@ -485,6 +512,13 @@ bloc avec deux lignes `<field>`.
 **Le flow refuse de se déployer après le merge : "duplicate element name".**
 Vous avez gardé les deux côtés d'un élément qui ne peut exister qu'une fois. Les noms d'éléments de
 flow sont uniques. Renommez-en un ou supprimez-en un.
+
+**Merge Changes ne liste pas le permission set, ou aucun fichier.**
+Le SF Merge Driver les a mergés pour vous : son élément en bas à droite de VS Code affiche un rond
+vert. Ouvrez le permission set et vérifiez qu'il contient les deux blocs de l'étape 5. Si le flow a
+été mergé aussi, ouvrez-le dans Flow Builder et vérifiez-le par rapport à l'étape 6 : le driver
+merge le XML, il ne décide pas quelle règle l'emporte. Cliquez ensuite sur l'élément pour éteindre
+le driver, avant que le [Lab 3.10](../level-3-release-manager/3-10-promote-a-subset-with-promotion-branches.md) n'ait besoin des conflits lui aussi.
 
 **Vous avez perdu votre modification entièrement.**
 Vous avez accepté le côté de Mariia sur tout le fichier. Dans le panneau **Source Control**, menu

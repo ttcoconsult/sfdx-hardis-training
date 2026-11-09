@@ -5,7 +5,7 @@ description: "Vous avez publié bien plus que votre story. Voyez ce que cela fai
 level: 2
 lab: 8
 lang: fr
-source_rev: "4cbd6367dca9477dca65e6e9ce51d3b16f4f2085"
+source_rev: "8d39c10791acd5b3ba34efe62f864d841ab5814c"
 screenshots:
   - annotated/vscode/pipeline-cards--new-user-story
   - annotated/vscode/metadata-retriever-recent-changes--pick-rows
@@ -23,7 +23,7 @@ depends_on:
 
 **Niveau** : 2 Contributeur avancé
 
-**Durée** : ~20 min<!-- observed --> (observé : médiane 20 min, 7 participants, le plus rapide 6 min)<!-- /observed -->
+**Durée** : ~25 min<!-- observed --> (observé : médiane 28 min, 16 participants, le plus rapide 10 min)<!-- /observed -->
 
 **Vous allez** : sur-sélectionner exprès au moment de publier, voir ce que cela fait à une Pull
 Request, et apprendre les deux chemins de récupération.
@@ -297,6 +297,12 @@ Documentation des commandes : [hardis:work:resetselection](https://sfdx-hardis.c
 - [ ] Votre modification de présentation de page toujours présente dans `helios-dev`
 
 ## En cas de problème
+
+**Le contrôle de la Pull Request trop large passe au rouge sur un profil, avec `no Layout named ...`.**
+Cela peut arriver : le profil est venu entier, avec des présentations de page que l'org cible n'a
+peut-être pas, l'erreur du [Lab 2.6](2-6-permission-sets-and-profiles.md). Ne corrigez pas le
+profil ici. La réinitialisation de l'étape 3 le retire de la Pull Request, et le contrôle de
+l'étape 5 ne porte que sur votre présentation de page.
 
 **La réinitialisation dit que vous avez des modifications en attente.**
 Publiez-les ou jetez-les d'abord dans le panneau **Source Control**, puis relancez la

@@ -5,7 +5,7 @@ description: "Transportez trois User Stories approuvées sur cinq de uat vers pr
 level: 3
 lab: 10
 lang: fr
-source_rev: "a79bd9f0bc8b0355a1143003a59de2639e2c7573"
+source_rev: "b6059bae37e4c491290a1dcbb0ee7b08fc95c2ea"
 screenshots:
   - annotated/vscode/welcome-custom-menu-3
   - annotated/vscode/pipeline-config-danger--promotion-branches
@@ -29,7 +29,7 @@ depends_on:
 
 **Niveau** : 3 Release Manager
 
-**Durée** : ~55 min<!-- observed --> (observé : médiane 57 min, 7 participants, le plus rapide 39 min)<!-- /observed -->
+**Durée** : ~1 h 15<!-- observed --> (observé : médiane 1 h 16, 11 participants, le plus rapide 39 min)<!-- /observed -->
 
 **Vous allez** : livrer en preprod trois User Stories approuvées pendant que deux autres restent en
 UAT, résoudre le conflit que l'une d'elles traîne avec elle, et remettre la pipeline d'aplomb
@@ -74,6 +74,9 @@ telle qu'elle est, US-058 et US-060 comprises.
 - [ ] `enablePromotionBranches` et `allowedPromotionSteps` publiés au
       [Lab 3.1](3-1-configure-the-pipeline-up-to-production.md), et remontés jusqu'à `preprod` par les promotions des Labs 3.5 et 3.6
 - [ ] Rien en attente dans le panneau **Source Control** qui vous tienne encore à cœur
+- [ ] **SF Merge Driver**, en bas à droite de VS Code, affiche un rond gris : le driver est éteint.
+      Si le rond est vert, cliquez dessus pour l'éteindre, sinon il résout les conflits de
+      l'étape 4 avant que vous ne les voyiez
 
 ## Les étapes
 
@@ -280,7 +283,7 @@ vu US-058.
 
 #### À faire : répondre à la question du conflit
 
-1. La commande demande quoi faire d'US-059, et propose quatre réponses **(1)**. Prenez la première,
+1. La commande demande quoi faire d'US-059, et propose sept réponses **(1)**. Prenez la première,
    **Recommended: commit this User Story and every following conflict with their conflict markers,
    without asking again**
 
@@ -294,9 +297,19 @@ vu US-058.
 #### Pourquoi cette réponse
 
 La promotion est assemblée en entier, conflit compris, et vous le résolvez en une passe sur la
-branche ensuite, à l'étape 6. Les trois autres réponses sont pour d'autres semaines : laisser la
-story de côté, committer celle-ci avec ses marqueurs mais redemander au prochain conflit, ou tout
-arrêter et tout défaire.
+branche ensuite, à l'étape 6. Les autres réponses, dans l'ordre où la question les liste, sont pour
+d'autres semaines : committer celle-ci avec ses marqueurs mais redemander au prochain conflit,
+résoudre ce conflit tout de suite dans l'éditeur pendant que la commande attend, laisser la story de
+côté, les deux réponses risquées ci-dessous, ou tout arrêter et tout défaire.
+
+Les deux réponses marquées **(risky)** gardent le côté `uat` de chaque ligne en conflit, et personne
+ne relit ce qu'elles ont décidé. Ici, elles garderaient la ligne et le droit Warranty Years que
+l'étape 6 supprime à la main, et qui appartiennent à US-058, une story que cette promotion laisse
+de côté. Cette semaine, la validation le verrait quand même, parce que `preprod` n'a pas de champ
+`Warranty_Years__c` et que le déploiement échoue. Avec un champ qui existe déjà dans `preprod`,
+rien ne le verrait : les fichiers sont seulement listés, sous un avertissement dans la description
+de la Pull Request et à la fin du message de commit de la story, pour que quelqu'un les relise avant
+le merge.
 
 Le log continue jusqu'au bout :
 
@@ -744,7 +757,7 @@ des promotion branches prescrit après chaque promotion, et celle que le
 #### À faire
 
 1. **New User Story**, comme au [Lab 3.7](3-7-hotfix-and-retrofit.md) étape 7 : type **Retrofit**, nom `US-059-retrofit`, cible
-   `integration`, org `helios-dev`
+   `integration`, org `helios-dev` (**Scratch org**, puis **Reuse scratch org helios-dev**)
 2. **Git: Fetch** puis **Git: Merge...** depuis la Command Palette, comme au [Lab 3.7](3-7-hotfix-and-retrofit.md) étape 8, et
    choisissez **origin/preprod** cette fois, sous **remote branches**
 3. Le merge s'arrête sur les deux mêmes fichiers, qui apparaissent sous **Merge Changes** dans le
@@ -852,11 +865,13 @@ et c'est volontaire.
 valeur par défaut que sfdx-hardis accepte d'inventer : entre quelles branches un release manager peut
 promouvoir est une décision sur votre pipeline.
 
-**Le cherry-pick d'US-059 n'est pas entré en conflit.**
-Quelque chose l'a résolu pour vous, en général le plugin `sf-git-merge-driver` s'il est installé sur
-votre machine. Ouvrez l'onglet **Files changed** de la Pull Request et cherchez `Warranty_Years__c`
+**Le cherry-pick d'US-059 n'est pas entré en conflit, ou sur un seul fichier.**
+Quelque chose l'a résolu pour vous, en général le SF Merge Driver : son élément en bas à droite de
+VS Code affiche un rond vert, et un clic l'éteint. Ouvrez l'onglet **Files changed** de la Pull Request et cherchez `Warranty_Years__c`
 dans la présentation de page et le permission set. S'il a voyagé, le déploiement échoue sur un champ
-que `preprod` n'a pas : retirez-le sur la promotion branch comme l'étape 6 le fait, et poussez.
+que `preprod` n'a pas : retirez-le sur la promotion branch comme l'étape 6 le fait, et poussez. S'il
+n'a pas voyagé, la promotion est juste telle quelle, et le retrofit de l'étape 9 peut quand même
+s'arrêter sur les deux fichiers.
 
 **Il n'y a pas de liens Accept au-dessus du bloc de conflit.**
 Le fichier est ouvert en aperçu ou le bloc est hors de vue. Cliquez dans le fichier, allez à la

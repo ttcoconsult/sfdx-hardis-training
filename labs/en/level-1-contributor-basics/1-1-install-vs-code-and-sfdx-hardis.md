@@ -46,7 +46,7 @@ GitHub, GitLab, Azure DevOps and Bitbucket all work the same from here.
     is where the training-specific part starts: free Salesforce orgs, a training repository,
     fictional data. None of that belongs on a real project.
 
-!!! tip "No VS Code? A browser tab or another editor does it"
+!!! tip "No VS Code? Agentforce Vibes or Cursor work too"
     [Agentforce Vibes](https://www.salesforce.com/agentforce/developers/vibe-coding/ide/) is VS Code inside Google Chrome, launched from a Salesforce org:
     a developer sandbox, or the free Developer Edition org [Lab 1.2](1-2-create-your-dev-hub-scratch-orgs-and-pipeline.md)
     signs you up for, which means this path costs nothing and needs nothing you do not already
@@ -57,8 +57,13 @@ GitHub, GitLab, Azure DevOps and Bitbucket all work the same from here.
     the same, and so are the screenshots: they were taken in desktop VS Code, which is the same
     editor.
 
-    [Cursor](https://cursor.com/) and the other editors built on VS Code work the same way, and from the same
-    Open VSX listing. Whichever one you use, the rest of this lab is written for what you see in it.
+    [Cursor](https://cursor.com/) works the same way, from the same Open VSX listing. Whichever of
+    VS Code, Agentforce Vibes or Cursor you use, the rest of this lab is written for what you see in it.
+
+    Pick one now and keep it to the end of the course. The scratch orgs Lab 1.2 creates are
+    connected only in the editor that created them. Set up from another editor, and the training
+    environment finds none of them there and asks for three new ones, which the Dev Hub refuses
+    while the first three are alive.
 
 ## Before you start
 
@@ -237,6 +242,8 @@ The dependencies worth knowing by name:
 - **SFDMU** - loads and extracts records, which is how your orgs get their data
 - **sfdx-git-delta** - works out what changed between two versions of the project, which is what the
   deployments send
+- **sfdx-browserforce-plugin** (Browserforce) - changes the Setup settings that cannot be deployed,
+  by clicking through Setup in a browser nobody sees, when a deployment asks for it
 - **Salesforce Extension Pack** - the official Salesforce tooling for VS Code
 
 The installs are the longest part of this lab and the only one you never repeat.
@@ -249,6 +256,7 @@ For each missing dependency it ran the plain npm command you would have run your
     sf plugins install sfdx-hardis
     sf plugins install sfdmu
     sf plugins install sfdx-git-delta
+    sf plugins install sfdx-browserforce-plugin
 
 then re-ran `sf version` and `sf plugins` and compared the answers with the versions published on
 the npm registry. That comparison is the whole point of the panel: a pipeline breaks in confusing
