@@ -4,12 +4,12 @@ description: "Formation Salesforce DevOps gratuite et pratique pour admins et d�
 id: l1-home
 level: 1
 lang: fr
-source_rev: "8a46402b636a25d9bacc31022afa6a0bcdd69b8e"
+source_rev: "5b576889b18558275bf81fee7b9cd588f5af7639"
 ---
 
 # Niveau 1 - Contributeur Salesforce DevOps, les bases
 
-**Durée** : environ 2 h 15, en une fois ou en sept.<!-- observed --> Observé sur les Labs 1.3 à 1.7 : médiane 1 h 20, 22 participants, le plus rapide 39 min.<!-- /observed -->
+**Durée** : environ 2 h, en une fois ou en sept.<!-- observed --> Observé sur les Labs 1.3 à 1.7 : médiane 1 h 31, 67 participants, le plus rapide 33 min.<!-- /observed -->
 
 **Prérequis** : aucun. C'est le premier niveau.
 
@@ -49,9 +49,9 @@ s'en charge.
 | [1.2](1-2-create-your-dev-hub-scratch-orgs-and-pipeline.md) | Créer votre Dev Hub, vos scratch orgs et votre pipeline CI/CD      | 30 min |
 | [1.3](1-3-start-a-user-story-on-a-git-branch.md)            | Démarrer une User Story sur sa propre branche Git                  | 10 min |
 | [1.4](1-4-build-a-custom-field-in-your-org.md)              | Construire un champ personnalisé dans votre org Salesforce         | 10 min |
-| [1.5](1-5-retrieve-commit-and-publish-your-changes.md)      | Récupérer, commiter et publier vos modifications Salesforce        | 20 min |
-| [1.6](1-6-pull-request-deployment-check-and-merge.md)       | Ouvrir une Pull Request, passer le contrôle de déploiement, merger | 20 min |
-| [1.7](1-7-capstone-deliver-a-user-story-on-your-own.md)     | Épreuve finale : livrer une User Story tout seul                   | 30 min |
+| [1.5](1-5-retrieve-commit-and-publish-your-changes.md)      | Récupérer, commiter et publier vos modifications Salesforce        | 15 min |
+| [1.6](1-6-pull-request-deployment-check-and-merge.md)       | Ouvrir une Pull Request, passer le contrôle de déploiement, merger | 15 min |
+| [1.7](1-7-capstone-deliver-a-user-story-on-your-own.md)     | Épreuve finale : livrer une User Story tout seul                   | 25 min |
 
 ## Le menu Training
 

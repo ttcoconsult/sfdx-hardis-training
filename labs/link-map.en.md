@@ -41,7 +41,7 @@ so a renamed documentation page fails CI here rather than surprising a learner.
 | Lab 3.1 - Configure the CI/CD pipeline up to production | https://sfdx-hardis-training.cloudity.com/en/level-3-release-manager/3-1-configure-the-pipeline-up-to-production/ |
 | Lab 3.2 - Review and merge a contributor Pull Request | https://sfdx-hardis-training.cloudity.com/en/level-3-release-manager/3-2-review-a-contributor-pull-request/ |
 | Lab 3.3 - Read the deployment log, and what .forceignore hides from it | https://sfdx-hardis-training.cloudity.com/en/level-3-release-manager/3-3-deploy-to-integration-and-read-the-log/ |
-| Lab 3.4 - Three Pull Requests collide: choose the merge order | https://sfdx-hardis-training.cloudity.com/en/level-3-release-manager/3-4-merge-colliding-pull-requests/ |
+| Lab 3.4 - Three Pull Requests in one release: review the merge order | https://sfdx-hardis-training.cloudity.com/en/level-3-release-manager/3-4-merge-colliding-pull-requests/ |
 | Lab 3.5 - Promote to UAT and write the release notes | https://sfdx-hardis-training.cloudity.com/en/level-3-release-manager/3-5-promote-to-uat-and-write-release-notes/ |
 | Lab 3.6 - Release to production and read your DORA metrics | https://sfdx-hardis-training.cloudity.com/en/level-3-release-manager/3-6-release-to-production-and-read-dora-metrics/ |
 | Lab 3.7 - Production is broken: hotfix and retrofit | https://sfdx-hardis-training.cloudity.com/en/level-3-release-manager/3-7-hotfix-and-retrofit/ |
@@ -63,12 +63,14 @@ so a renamed documentation page fails CI here rather than surprising a learner.
 | salesforce-devops-config-cleaning | https://sfdx-hardis.cloudity.com/salesforce-devops-config-cleaning/ |
 | salesforce-devops-config-delta-deployment | https://sfdx-hardis.cloudity.com/salesforce-devops-config-delta-deployment/ |
 | salesforce-devops-config-overwrite | https://sfdx-hardis.cloudity.com/salesforce-devops-config-overwrite/ |
+| salesforce-devops-config-replacement-rules | https://sfdx-hardis.cloudity.com/salesforce-devops-config-replacement-rules/ |
 | salesforce-devops-create-new-user-story | https://sfdx-hardis.cloudity.com/salesforce-devops-create-new-user-story/ |
 | salesforce-devops-deploy-major-branches | https://sfdx-hardis.cloudity.com/salesforce-devops-deploy-major-branches/ |
 | salesforce-devops-git-tokens | https://sfdx-hardis.cloudity.com/salesforce-devops-git-tokens/ |
 | salesforce-devops-handle-merge-request-results | https://sfdx-hardis.cloudity.com/salesforce-devops-handle-merge-request-results/ |
 | salesforce-devops-hotfixes | https://sfdx-hardis.cloudity.com/salesforce-devops-hotfixes/ |
 | salesforce-devops-manual-repo-clean | https://sfdx-hardis.cloudity.com/salesforce-devops-manual-repo-clean/ |
+| salesforce-devops-org-initialization | https://sfdx-hardis.cloudity.com/salesforce-devops-org-initialization/ |
 | salesforce-devops-promotion-branches | https://sfdx-hardis.cloudity.com/salesforce-devops-promotion-branches/ |
 | salesforce-devops-publish-user-story | https://sfdx-hardis.cloudity.com/salesforce-devops-publish-user-story/ |
 | salesforce-devops-pull-request-github | https://sfdx-hardis.cloudity.com/salesforce-devops-pull-request-github/ |
@@ -82,6 +84,7 @@ so a renamed documentation page fails CI here rather than surprising a learner.
 | salesforce-devops-setup-home | https://sfdx-hardis.cloudity.com/salesforce-devops-setup-home/ |
 | salesforce-devops-setup-integration-email | https://sfdx-hardis.cloudity.com/salesforce-devops-setup-integration-email/ |
 | salesforce-devops-setup-integration-generic-ticketing | https://sfdx-hardis.cloudity.com/salesforce-devops-setup-integration-generic-ticketing/ |
+| salesforce-devops-setup-scratch-org-pool | https://sfdx-hardis.cloudity.com/salesforce-devops-setup-scratch-org-pool/ |
 | salesforce-devops-smart-deployment | https://sfdx-hardis.cloudity.com/salesforce-devops-smart-deployment/ |
 | salesforce-devops-solve-deployment-errors | https://sfdx-hardis.cloudity.com/salesforce-devops-solve-deployment-errors/ |
 | salesforce-devops-solve-megalinter-errors | https://sfdx-hardis.cloudity.com/salesforce-devops-solve-megalinter-errors/ |
@@ -91,6 +94,10 @@ so a renamed documentation page fails CI here rather than surprising a learner.
 | salesforce-devops-work-on-user-story | https://sfdx-hardis.cloudity.com/salesforce-devops-work-on-user-story/ |
 | salesforce-devops-work-on-user-story-configuration | https://sfdx-hardis.cloudity.com/salesforce-devops-work-on-user-story-configuration/ |
 | salesforce-devops-work-on-user-story-deployment-actions | https://sfdx-hardis.cloudity.com/salesforce-devops-work-on-user-story-deployment-actions/ |
+| salesforce-devops-work-on-user-story-deployment-actions-apex | https://sfdx-hardis.cloudity.com/salesforce-devops-work-on-user-story-deployment-actions-apex/ |
+| salesforce-devops-work-on-user-story-deployment-actions-data | https://sfdx-hardis.cloudity.com/salesforce-devops-work-on-user-story-deployment-actions-data/ |
+| salesforce-devops-work-on-user-story-deployment-actions-manual | https://sfdx-hardis.cloudity.com/salesforce-devops-work-on-user-story-deployment-actions-manual/ |
+| salesforce-devops-work-on-user-story-deployment-actions-schedule-batch | https://sfdx-hardis.cloudity.com/salesforce-devops-work-on-user-story-deployment-actions-schedule-batch/ |
 | salesforce-devops-work-on-user-story-development | https://sfdx-hardis.cloudity.com/salesforce-devops-work-on-user-story-development/ |
 | salesforce-devops-work-on-user-story-profiles | https://sfdx-hardis.cloudity.com/salesforce-devops-work-on-user-story-profiles/ |
 | salesforce-monitoring-config-github | https://sfdx-hardis.cloudity.com/salesforce-monitoring-config-github/ |
