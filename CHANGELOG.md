@@ -3,6 +3,19 @@
 What changed in the course, for learners and trainers. The course has no versions: each section is
 a day, newest first, and a change goes under the date of the day it is made.
 
+## 2026-11-11
+
+- Guinea Run: **Remove me from the Hall of Fame** sticks. The game used to take the player's id back from its own save at the next write, then kept sending their new best scores.
+
+## 2026-11-10
+
+- Guinea Run: the first score of a player opens a window over the end card, with the score, a nickname box, the guinea pigs and a large **Join the Hall of Fame** button. **No thanks** or Escape closes it for good, and Enter in the nickname box joins.
+
+## 2026-11-09
+
+- The screenshots of the windows opened over the DevOps Pipeline (branch windows, Pull Request windows, deployment action editors) are taken again, with the new view switch behind them.
+- Lab 1.2: the lab driver answers the question that a computer already signed in to GitHub gets first, *Fork the course into the GitHub account ...?*, which the lab describes, so the driver no longer stops on it.
+
 ## 2026-11-08
 
 - Lab 1.1: the Browserforce dependency is named **sfdx-browserforce-plugin**, as its card in the Setup panel reads.

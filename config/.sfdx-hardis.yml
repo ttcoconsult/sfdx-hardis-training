@@ -274,3 +274,8 @@ useSmartDeploymentTests: false
 allowedPromotionSteps:
   - source: uat
     target: preprod
+devOrgsStaleDays: 30
+enableDevOrgsRegistry: true
+enableMajorBranchDeploymentCheck: false
+majorBranchDeploymentCheckValidityHours: 24
+monitoringRepository: https://github.com/ttcoconsult/sfdx-hardis-training-monitoring
